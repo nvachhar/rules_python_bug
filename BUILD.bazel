@@ -1,0 +1,30 @@
+load("@rules_python//python:defs.bzl", "py_binary")
+
+OSES = [
+    "linux",
+    "macos",
+]
+
+CPUS = [
+    "x86_64",
+    "arm64",
+]
+
+[
+    platform(
+        name = "{}-{}".format(os, cpu),
+        constraint_values = [
+            "@platforms//os:{}".format(os),
+            "@platforms//cpu:{}".format(cpu),
+        ],
+        visibility = ["//visibility:public"],
+    )
+    for os in OSES
+    for cpu in CPUS
+]
+
+py_binary(
+    name = "hello",
+    srcs = ["hello.py"],
+    python_version = "PY3",
+)
